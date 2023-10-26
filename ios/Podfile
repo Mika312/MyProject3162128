@@ -25,8 +25,16 @@ if linkage != nil
   use_frameworks! :linkage => linkage.to_sym
 end
 
+$RNFirebaseAsStaticFramework = true
+
 target 'MyProject3162128' do
   config = use_native_modules!
+
+  # enable modular_headers on firebase module
+    pod 'Firebase', :modular_headers => true
+    pod 'FirebaseCoreInternal', :modular_headers => true
+    pod 'GoogleUtilities', :modular_headers => true
+    pod 'FirebaseCore', :modular_headers => true
 
   # Flags change depending on the env values.
   flags = get_default_flags()
