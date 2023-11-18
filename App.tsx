@@ -14,14 +14,18 @@ export const App = () => {
     // Get the users ID token
     const {idToken} = await GoogleSignin.signIn();
 
-    console.log('idToken', idToken);
-
     // Create a Google credential with the token
     const googleCredential = auth.GoogleAuthProvider.credential(idToken);
 
     // Sign-in the user with the credential
     return auth().signInWithCredential(googleCredential);
   }
+
+  const logout = () => {
+    auth()
+      .signOut()
+      .then(() => console.log('User signed out!'));
+  };
 
   // Set an initializing state whilst Firebase connects
   const [initializing, setInitializing] = useState(true);
@@ -38,13 +42,11 @@ export const App = () => {
     return subscriber; // unsubscribe on unmount
   }, []);
 
-  console.log('user', user);
-
   if (initializing) return <Text>Loading</Text>;
 
   return (
     <SafeAreaView style={styles.safeAreaView}>
-      <Text>MyProject</Text>
+      <Text>MyProject {user?.displayName}</Text>
       <Button
         title="Google Sign-In"
         onPress={() =>
@@ -53,6 +55,7 @@ export const App = () => {
           )
         }
       />
+      <Button title="Logout" onPress={logout} />
     </SafeAreaView>
   );
 };
